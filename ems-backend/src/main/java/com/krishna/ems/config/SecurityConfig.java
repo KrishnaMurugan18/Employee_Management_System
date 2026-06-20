@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 import java.util.List;
 
 @Configuration
@@ -49,9 +50,9 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/api/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/api/departments/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/api/dashboard/**", "/api/audit-logs/**").hasRole("ADMIN")
+                        .requestMatchers("/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/departments/**").hasAnyRole("ADMIN", "EMPLOYEE")
+                        .requestMatchers("/dashboard/**", "/audit-logs/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -81,6 +82,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

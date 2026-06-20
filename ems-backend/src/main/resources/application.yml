@@ -45,7 +45,7 @@ app:
     access-token-expiration-ms: ${JWT_ACCESS_EXPIRY:3600000}      # 1 hour
     refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRY:604800000} # 7 days
   cors:
-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173}
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173,https://employee-management-system-4kyd541zg-krishnakumarm1809002.vercel.app}
   upload:
     dir: ${UPLOAD_DIR:./uploads/profile-images}
   admin:
