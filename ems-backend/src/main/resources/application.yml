@@ -1,0 +1,65 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: employee-management-system
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ems_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:1111}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 100
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dGhpc0lzQVZlcnlMb25nU2VjcmV0S2V5Rm9ySldUU2lnbmluZ1B1cnBvc2VzT25seTIwMjU=}
+    access-token-expiration-ms: ${JWT_ACCESS_EXPIRY:3600000}      # 1 hour
+    refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRY:604800000} # 7 days
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173}
+  upload:
+    dir: ${UPLOAD_DIR:./uploads/profile-images}
+  admin:
+    default-email: ${ADMIN_EMAIL:admin@ems.com}
+    default-password: ${ADMIN_PASSWORD:Admin@123}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+logging:
+  level:
+    com.krishna.ems: ${LOG_LEVEL:INFO}
+    org.springframework.security: WARN
