@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 
 import java.util.List;
@@ -49,11 +50,30 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/employees/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/departments/**").hasAnyRole("ADMIN", "EMPLOYEE")
-                        .requestMatchers("/dashboard/**", "/audit-logs/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+
+                        // Allow CORS preflight requests from browser
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                        .permitAll()
+
+                        // Public APIs (login, swagger, uploads)
+                        .requestMatchers(PUBLIC_ENDPOINTS)
+                        .permitAll()
+
+                        // Employee APIs
+                        .requestMatchers("/employees/**")
+                        .hasAnyRole("ADMIN", "EMPLOYEE")
+
+                        // Department APIs
+                        .requestMatchers("/departments/**")
+                        .hasAnyRole("ADMIN", "EMPLOYEE")
+
+                        // Admin-only APIs
+                        .requestMatchers("/dashboard/**", "/audit-logs/**")
+                        .hasRole("ADMIN")
+
+                        // Everything else requires authentication
+                        .anyRequest()
+                        .authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
