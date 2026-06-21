@@ -114,6 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EmployeeResponse getById(Long id) {
         return employeeRepository.findById(id)
                 .map(employeeMapper::toResponse)
@@ -121,6 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<EmployeeResponse> search(String search, Long departmentId, EmployeeStatus status,
                                                   int page, int size, String sortBy, String sortDir) {
         Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,
@@ -135,6 +137,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EmployeeResponse getMyProfile(String email) {
         Employee employee = employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee profile not found"));

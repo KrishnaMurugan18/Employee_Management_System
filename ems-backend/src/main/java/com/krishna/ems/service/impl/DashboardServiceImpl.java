@@ -11,6 +11,7 @@ import com.krishna.ems.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +31,7 @@ public class DashboardServiceImpl implements DashboardService {
     private static final DateTimeFormatter DISPLAY_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
+    @Transactional(readOnly = true)
     public DashboardStatsResponse getStats() {
         long total = employeeRepository.count();
         long active = employeeRepository.countByStatus(EmployeeStatus.ACTIVE);
